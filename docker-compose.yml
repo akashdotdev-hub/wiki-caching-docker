@@ -1,0 +1,15 @@
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  script:
+    image: python:3.11-slim
+    volumes:
+      - .:/script
+    working_dir: /script
+    depends_on:
+      - redis
+    command: >
+      sh -c "pip install redis requests && python script.py"    
