@@ -1,11 +1,18 @@
+import os
 import redis
 import requests
 import time
 
 # Connect to the Redis container
 # Make sure this host name matches your service name in docker-compose.yml
-cache = redis.Redis(host='redis', port=6379, decode_responses=True)
+redis_password = os.environ.get('REDIS_PASSWORD', None)
 
+cache = redis.Redis(
+    host='redis', 
+    port=6379, 
+    password=redis_password,  # <-- THIS IS THE MAGIC LINE
+    decode_responses=True
+)
 def get_wikipedia_summary(page_title):
     # 1. Try to get data from the cache first
     try:
